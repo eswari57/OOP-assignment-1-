@@ -1,0 +1,35 @@
+class Mobile {
+    private String model;
+    private int batteryLife; 
+    public void setModel(String modelName) {
+        model = modelName;
+    }
+public void setBatteryLife(int battery) {
+        if (battery < 0) {
+            batteryLife = 0;
+        } else if (battery > 100) {
+            batteryLife = 100;
+        } else {
+            batteryLife = battery;
+        }
+    }
+public void charge(int amount) {
+        batteryLife += amount;
+        if (batteryLife > 100) {
+            batteryLife = 100;
+        }
+        System.out.println(model + " charged. Battery: " + batteryLife + "%");
+    }
+public void checkBatteryStatus() {
+        System.out.println(model + " battery life: " + batteryLife + "%");
+    }
+public static void main(String[] args) {
+        Mobile phone = new Mobile();
+        phone.setModel("Samsung Galaxy S21");
+        phone.setBatteryLife(50);
+
+        phone.checkBatteryStatus();
+        phone.charge(30);
+        phone.checkBatteryStatus();
+    }
+}
