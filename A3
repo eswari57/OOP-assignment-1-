@@ -1,0 +1,28 @@
+import java.lang.reflect.Method;
+public class ReflectionExample {
+    public static void main(String[] args) {
+        try {
+            // Example object
+            Person person = new Person("Alice", 22);
+            Class<?> clazz = person.getClass();
+            Method method = clazz.getMethod("printDetails");
+            method.invoke(person);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+class Person {
+    private String name;
+    private int age;
+
+    Person(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    public void printDetails() {
+        System.out.println("Name: " + name + ", Age: " + age);
+    }
+}
