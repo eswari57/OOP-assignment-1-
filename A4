@@ -1,0 +1,75 @@
+import java.io.*;
+import java.net.*;
+
+public class Server {
+    public static void main(String[] args) {
+        try (ServerSocket ss = new ServerSocket(6000)) {  // auto-closes when done
+            File file = new File("sample.txt");
+            byte[] data = new byte[(int) file.length()];
+
+            try (FileInputStream fis = new FileInputStream(file)) {
+                fis.read(data);
+            }
+
+            System.out.println("Server ready...");
+
+            while (true) {
+                try (Socket s = ss.accept();
+                     OutputStream os = s.getOutputStream()) {
+                    os.write(data);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+import java.io.*;
+import java.net.*;
+
+class DownloadThread extends Thread {
+    private final int id;
+
+    public DownloadThread(int id) { this.id = id; }
+
+    public void run() {
+        try (Socket s = new Socket("localhost", 6000);
+             InputStream in = s.getInputStream();
+             FileOutputStream fos = new FileOutputStream("part" + id + ".txt")) {
+
+            byte[] buf = new byte[1024];
+            int bytes;
+            while ((bytes = in.read(buf)) != -1) {
+                fos.write(buf, 0, bytes);
+            }
+
+        } catch (IOException e) { e.printStackTrace(); }
+    }
+}
+
+public class Client {
+    public static void main(String[] args) throws Exception {
+        int threads = 4;
+        DownloadThread[] dt = new DownloadThread[threads];
+
+        for (int i = 0; i < threads; i++) {
+            dt[i] = new DownloadThread(i);
+            dt[i].start();
+        }
+
+        for (int i = 0; i < threads; i++) dt[i].join();
+
+        try (FileOutputStream out = new FileOutputStream("output.txt")) {
+            for (int i = 0; i < threads; i++) {
+                try (FileInputStream in = new FileInputStream("part" + i + ".txt")) {
+                    out.write(in.readAllBytes());
+                }
+            }
+        }
+
+        System.out.println("Download complete!");
+    }
+}
+
