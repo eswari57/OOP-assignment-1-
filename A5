@@ -1,0 +1,102 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
+public class StudentForm {
+    public static void main(String[] args) {
+        JFrame frame = new JFrame("Student Registration Form");
+        frame.setSize(450, 400);
+        frame.setLayout(new GridLayout(6, 2, 10, 10));
+        frame.getContentPane().setBackground(new Color(245, 240, 230)); // soft beige background
+
+        Font labelFont = new Font("Segoe UI", Font.PLAIN, 15);
+        Font fieldFont = new Font("Segoe UI", Font.PLAIN, 14);
+
+        JLabel nameLabel = new JLabel("Name:");
+        nameLabel.setFont(labelFont);
+        JTextField nameField = new JTextField();
+        nameField.setFont(fieldFont);
+
+        JLabel rollLabel = new JLabel("Roll No:");
+        rollLabel.setFont(labelFont);
+        JTextField rollField = new JTextField();
+        rollField.setFont(fieldFont);
+
+        JLabel genderLabel = new JLabel("Gender:");
+        genderLabel.setFont(labelFont);
+        JRadioButton male = new JRadioButton("Male");
+        JRadioButton female = new JRadioButton("Female");
+        male.setBackground(new Color(245, 240, 230));
+        female.setBackground(new Color(245, 240, 230));
+        ButtonGroup bg = new ButtonGroup();
+        bg.add(male);
+        bg.add(female);
+
+        JPanel genderPanel = new JPanel();
+        genderPanel.setBackground(new Color(245, 240, 230));
+        genderPanel.add(male);
+        genderPanel.add(female);
+
+        JLabel deptLabel = new JLabel("Department:");
+        deptLabel.setFont(labelFont);
+        String[] dept = {"ECE", "CSE", "EEE", "MECH"};
+        JComboBox<String> deptBox = new JComboBox<>(dept);
+        deptBox.setFont(fieldFont);
+
+        JLabel hobbyLabel = new JLabel("Hobbies:");
+        hobbyLabel.setFont(labelFont);
+        JCheckBox dance = new JCheckBox("Dance");
+        JCheckBox music = new JCheckBox("Music");
+        JCheckBox sports = new JCheckBox("Sports");
+        dance.setBackground(new Color(245, 240, 230));
+        music.setBackground(new Color(245, 240, 230));
+        sports.setBackground(new Color(245, 240, 230));
+        JPanel hobbyPanel = new JPanel();
+        hobbyPanel.setBackground(new Color(245, 240, 230));
+        hobbyPanel.add(dance);
+        hobbyPanel.add(music);
+        hobbyPanel.add(sports);
+
+        JButton submit = new JButton("Submit");
+        submit.setFont(new Font("Segoe UI Semibold", Font.PLAIN, 15));
+        submit.setBackground(new Color(200, 170, 120));
+        submit.setForeground(Color.WHITE);
+        submit.setFocusPainted(false);
+
+        submit.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String name = nameField.getText();
+                String roll = rollField.getText();
+                String gender = male.isSelected() ? "Male" : (female.isSelected() ? "Female" : "Not selected");
+                String department = (String) deptBox.getSelectedItem();
+
+                String hobbies = "";
+                if (dance.isSelected()) hobbies += "Dance ";
+                if (music.isSelected()) hobbies += "Music ";
+                if (sports.isSelected()) hobbies += "Sports ";
+
+                // Center-aligned styled message
+                JLabel message = new JLabel("<html><center>"
+                        + "<b>Student Registration Details</b><br><br>"
+                        + "Name: " + name + "<br>"
+                        + "Roll No: " + roll + "<br>"
+                        + "Gender: " + gender + "<br>"
+                        + "Department: " + department + "<br>"
+                        + "Hobbies: " + hobbies + "</center></html>");
+                message.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+
+                JOptionPane.showMessageDialog(frame, message, "Registration Info", JOptionPane.INFORMATION_MESSAGE);
+            }
+        });
+
+        frame.add(nameLabel); frame.add(nameField);
+        frame.add(rollLabel); frame.add(rollField);
+        frame.add(genderLabel); frame.add(genderPanel);
+        frame.add(deptLabel); frame.add(deptBox);
+        frame.add(hobbyLabel); frame.add(hobbyPanel);
+        frame.add(new JLabel()); frame.add(submit);
+
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setVisible(true);
+    }
+}
